@@ -36,4 +36,3 @@ send.addEventListener("click", async () => {
   // Salva risposta bot in Supabase
   saveMessage(text, reply, "gpt-4o-mini", "utente123", "sessione1", "assistant");
 });
-
