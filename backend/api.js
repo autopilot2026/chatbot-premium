@@ -1,29 +1,35 @@
-const messages = document.getElementById("messages");
-const input = document.getElementById("input");
-const send = document.getElementById("send");
+// --- CONFIGURAZIONE SUPABASE ---
+const SUPABASE_URL = "https://wqutefokqwfjdnqmscpl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_3PM9YClLenyIw7DsQ8SaYg_EdRy1ydE";
 
-async function sendToBackend(text) {
-    // Simulazione chiamata API
-    const response = await fetch("backend/api.js");
-    const data = await response.json().catch(() => null);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    return data?.reply || "Errore: backend non collegato.";
+// --- FUNZIONE PER SALVARE I MESSAGGI ---
+async function saveMessage(userMessage, botResponse, model, userId, sessionId, role) {
+  const { data, error } = await supabaseClient
+    .from("messages")
+    .insert([
+      {
+        user_message: userMessage,
+        bot_response: botResponse,
+        model: model,
+        user_id: userId,
+        session_id: sessionId,
+        role: role
+      }
+    ]);
+
+  if (error) {
+    console.error("Errore Supabase:", error);
+  } else {
+    console.log("Messaggio salvato:", data);
+  }
 }
 
-send.addEventListener("click", async () => {
-    const text = input.value.trim();
-    if (!text) return;
+// --- FUNZIONE PER INVIARE AL BACKEND ---
+async function sendToBackend(text) {
+  const response = await fetch("backend/api.js");
+  const data = await response.json().catch(() => null);
 
-    const userMsg = document.createElement("div");
-    userMsg.textContent = "Tu: " + text;
-    messages.appendChild(userMsg);
-
-    input.value = "";
-
-    const botMsg = document.createElement("div");
-    botMsg.textContent = "AI AutoPilot 2026: sto pensando...";
-    messages.appendChild(botMsg);
-
-    const reply = await sendToBackend(text);
-    botMsg.textContent = reply;
-});
+  return data?.reply || "Errore: backend non collegato.";
+}
