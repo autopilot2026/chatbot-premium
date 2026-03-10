@@ -2,7 +2,14 @@ const messages = document.getElementById("messages");
 const input = document.getElementById("input");
 const send = document.getElementById("send");
 
-send.addEventListener("click", () => {
+async function sendToBackend(text) {
+    const response = await fetch("backend/api.js");
+    const data = await response.json().catch(() => null);
+
+    return data?.reply || "Errore: backend non collegato.";
+}
+
+send.addEventListener("click", async () => {
     const text = input.value.trim();
     if (!text) return;
 
@@ -12,8 +19,10 @@ send.addEventListener("click", () => {
 
     input.value = "";
 
-    // Risposta temporanea (poi la colleghiamo al backend)
     const botMsg = document.createElement("div");
-    botMsg.textContent = "AI AutoPilot 2026: Risposta in arrivo...";
+    botMsg.textContent = "AI AutoPilot 2026: sto pensando...";
     messages.appendChild(botMsg);
+
+    const reply = await sendToBackend(text);
+    botMsg.textContent = reply;
 });
