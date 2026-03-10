@@ -1,38 +1,34 @@
+// Selezione elementi
 const messages = document.getElementById("messages");
 const input = document.getElementById("input");
 const send = document.getElementById("send");
 
-// Funzione per inviare al backend
-async function sendToBackend(text) {
-  const response = await fetch("backend/api.js");
-  const data = await response.json().catch(() => null);
-
-  return data?.reply || "Errore: backend non collegato.";
+// Funzione per aggiungere messaggi nella chat
+function addMessage(text, sender) {
+    const div = document.createElement("div");
+    div.textContent = sender + ": " + text;
+    div.style.marginBottom = "8px";
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
 }
 
-send.addEventListener("click", async () => {
-  const text = input.value.trim();
-  if (!text) return;
+// Invia messaggio
+function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
 
-  // Mostra messaggio utente
-  const userMsg = document.createElement("div");
-  userMsg.textContent = "Tu: " + text;
-  messages.appendChild(userMsg);
+    addMessage(text, "Tu");
+    input.value = "";
 
-  // Salva messaggio utente in Supabase
-  saveMessage(text, null, null, "utente123", "sessione1", "user");
+    // Risposta finta del bot (per test)
+    setTimeout(() => {
+        addMessage("Risposta automatica di test...", "AI AutoPilot 2026");
+    }, 500);
+}
 
-  input.value = "";
-
-  // Mostra placeholder bot
-  const botMsg = document.createElement("div");
-  botMsg.textContent = "AI AutoPilot 2026: sto pensando...";
-  messages.appendChild(botMsg);
-
-  // Ottieni risposta dal backend
-  const reply = await sendToBackend(text);
-  botMsg.textContent = reply;
-
-  // Salva risposta bot in Supabase
-  saveMessage(text, reply, "gpt-4o-mini", "utente123", "sessione1", "assistant");
+// Eventi
+send.addEventListener("click", sendMessage);
+input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendMessage();
 });
+
