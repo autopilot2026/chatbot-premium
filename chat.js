@@ -21,9 +21,10 @@ function sendMessage() {
     input.value = "";
 
     // Risposta finta del bot (per test)
-    setTimeout(() => {
-        addMessage("Risposta automatica di test...", "AI AutoPilot 2026");
-    }, 500);
+setTimeout(() => {
+    addMessage("Risposta automatica di test...", "AI AutoPilot 2026");
+}, 500);
+
 }
 
 // Eventi
@@ -31,4 +32,3 @@ send.addEventListener("click", sendMessage);
 input.addEventListener("keypress", function(e) {
     if (e.key === "Enter") sendMessage();
 });
-
