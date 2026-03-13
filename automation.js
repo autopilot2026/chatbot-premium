@@ -4,7 +4,7 @@
 
 // 1. CONFIGURAZIONE FACEBOOK
 const FACEBOOK_ACCESS_TOKEN = "INSERISCI_IL_TUO_TOKEN";
-const FACEBOOK_PAGE_ID = "INSERISCI_LA_TUA_PAGINA";
+const FACEBOOK_PAGE_ID = "61585024054283";
 
 // 2. FUNZIONE: Pubblicazione automatica su Facebook
 async function runAutomation(automationId) {
