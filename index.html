@@ -2,24 +2,60 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Chatbot Premium – AI AutoPilot 2026</title>
+    <title>AI AutoPilot 2026 – Dashboard Automazioni</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
-        #input { width: 70%; padding: 10px; }
-        #send { padding: 10px 20px; }
+        body { font-family: Arial; background: #f4f4f4; margin: 0; padding: 0; }
+        header { background: #111; color: #fff; padding: 20px; text-align: center; }
+        .container { padding: 20px; }
+        .card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 20px;
+            background: #0078ff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #005fcc; }
     </style>
 </head>
 <body>
 
-    <h1>Chatbot Premium – AI AutoPilot 2026</h1>
+<header>
+    <h1>AI AutoPilot 2026</h1>
+    <p>Dashboard Automazioni</p>
+</header>
 
-    <div id="messages"></div>
+<div class="container">
 
-    <input id="input" type="text" placeholder="Scrivi un messaggio...">
-    <button id="send">Invia</button>
+    <div class="card">
+        <h2>Automazione 1</h2>
+        <p>Descrizione della funzione automatica.</p>
+        <button onclick="runAutomation(1)">Esegui Automazione</button>
+    </div>
 
-    <script src="chat.js"></script>
+    <div class="card">
+        <h2>Automazione 2</h2>
+        <p>Descrizione della funzione automatica.</p>
+        <button onclick="runAutomation(2)">Esegui Automazione</button>
+    </div>
+
+    <div class="card">
+        <h2>Automazione 3</h2>
+        <p>Descrizione della funzione automatica.</p>
+        <button onclick="runAutomation(3)">Esegui Automazione</button>
+    </div>
+
+</div>
+
+<script src="automation.js"></script>
 
 </body>
 </html>
