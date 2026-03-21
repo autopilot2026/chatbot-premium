@@ -12,33 +12,46 @@ function addMessage(text, sender) {
     messages.scrollTop = messages.scrollHeight;
 }
 
-// --- CERVELLO DEL CHATBOT ---
-function getBotReply(text) {
-    const msg = text.toLowerCase();
+// --- INVIO AL BACKEND NEURA ---
+async function sendToNeura(text) {
+    try {
+        const response = await fetch("/api/neura", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                input: text,
+                tono: "professionale"
+            })
+        });
 
-    if (msg.includes("ciao")) return "Ciao Giuseppe! Come posso aiutarti oggi?";
-    if (msg.includes("come stai")) return "Sto benissimo e pronto a lavorare con te!";
-    if (msg.includes("chi sei")) return "Sono il Chatbot Premium di AI AutoPilot 2026.";
-    if (msg.includes("ai autopilot")) return "AI AutoPilot 2026 è la tua piattaforma di automazione.";
-    if (msg.includes("grazie")) return "È un piacere aiutarti!";
-    if (msg.includes("test")) return "Il test funziona perfettamente.";
+        const data = await response.json();
+        return data.risposta || "Errore nella risposta di NEURA.";
 
-    return "Non ho capito bene… puoi ripetere?";
+    } catch (err) {
+        return "Errore di connessione con NEURA.";
+    }
 }
 
 // Invia messaggio
-function sendMessage() {
+async function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
 
     addMessage(text, "Tu");
     input.value = "";
 
-    // Risposta intelligente
-    setTimeout(() => {
-        const reply = getBotReply(text);
-        addMessage(reply, "AI AutoPilot 2026");
-    }, 500);
+    // Mostra caricamento
+    addMessage("Sto elaborando...", "NEURA");
+
+    // Ottieni risposta da NEURA
+    const reply = await sendToNeura(text);
+
+    // Rimuove il messaggio "Sto elaborando..."
+    messages.lastChild.remove();
+
+    addMessage(reply, "NEURA");
 }
 
 // Eventi
@@ -46,3 +59,4 @@ send.addEventListener("click", sendMessage);
 input.addEventListener("keypress", function(e) {
     if (e.key === "Enter") sendMessage();
 });
+
