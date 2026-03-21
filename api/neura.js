@@ -16,7 +16,7 @@ Genera una risposta chiara, utile e professionale.
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+        model: "llama3-8b",
         messages: [
           { role: "system", content: "Sei NEURA, un assistente AI professionale." },
           { role: "user", content: prompt }
