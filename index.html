@@ -193,7 +193,8 @@ function closeChat() {
     document.getElementById("chatBox").style.display = "none";
 }
 
-function sendMessage() {
+<script>
+async function sendMessage() {
     let msg = document.getElementById("userMessage").value;
     if (!msg.trim()) return;
 
@@ -201,12 +202,32 @@ function sendMessage() {
     box.innerHTML += "<div><b>Tu:</b> " + msg + "</div>";
     document.getElementById("userMessage").value = "";
 
-    // Risposta finta (poi la colleghiamo alla tua API)
-    setTimeout(() => {
-        box.innerHTML += "<div><b>NEURA:</b> Sto elaborando...</div>";
-        box.scrollTop = box.scrollHeight;
-    }, 300);
+    // Mostra caricamento
+    box.innerHTML += "<div id='loading'><b>NEURA:</b> Sto elaborando...</div>";
+    box.scrollTop = box.scrollHeight;
+
+    // Chiamata reale alla tua API
+    const response = await fetch("/api/neura", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            input: msg,
+            tono: "professionale"
+        })
+    });
+
+    const data = await response.json();
+    const reply = data.risposta || "Errore nella risposta di NEURA.";
+
+    // Rimuove il caricamento
+    document.getElementById("loading").remove();
+
+    // Mostra risposta reale
+    box.innerHTML += "<div><b>NEURA:</b> " + reply + "</div>";
+    box.scrollTop = box.scrollHeight;
 }
+</script>
+
 </script>
 
 <script src="chat.js"></script>
