@@ -1,13 +1,12 @@
 export default async function handler(req, res) {
   try {
-    const { input, tono } = req.body;
+    console.log("NEURA API CHIAMATA. Body ricevuto:", req.body);
 
-    const prompt = `
-Sei NEURA, il chatbot intelligente di AutoPilot 2026.
-Rispondi al messaggio del cliente con tono: ${tono}.
-Messaggio del cliente: "${input}"
-Genera una risposta chiara, utile e professionale.
-    `;
+    const { input, tono } = req.body || {};
+
+    if (!input) {
+      return res.status(400).json({ risposta: "Manca il campo 'input' nel body." });
+    }
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -19,12 +18,15 @@ Genera una risposta chiara, utile e professionale.
         model: "llama3-8b",
         messages: [
           { role: "system", content: "Sei NEURA, un assistente AI professionale." },
-          { role: "user", content: prompt }
+          { role: "user", content: input }
         ]
       })
     });
 
+    console.log("Status Groq:", response.status);
     const data = await response.json();
+    console.log("Risposta Groq:", data);
+
     const risposta = data.choices?.[0]?.message?.content || "Errore nella generazione della risposta.";
 
     res.status(200).json({ risposta });
