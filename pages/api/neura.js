@@ -9,119 +9,124 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Messaggio mancante" });
   }
 
-  // --- RISPOSTE SOFTWARE ---
-  const softwareKeywords = [
-    "software", "installazione", "installare", "attivazione", "attivare",
-    "licenza", "errore", "problema", "setup", "download"
+  const msg = message.toLowerCase();
+
+  // -------------------------------------------------------
+  // EMOZIONI (testo + emoji)
+  // -------------------------------------------------------
+  const emotionalStates = [
+    { keywords: ["😡", "arrabbiato", "incazzato", "basta", "odio"], tone: "anger" },
+    { keywords: ["😭", "triste", "deluso", "mi dispiace"], tone: "sad" },
+    { keywords: ["😱", "paura", "spaventato"], tone: "fear" },
+    { keywords: ["😩", "stress", "non ce la faccio"], tone: "stress" },
+    { keywords: ["😔", "delusione"], tone: "sad" },
+    { keywords: ["❤️", "grazie", "gentile"], tone: "positive" }
   ];
 
-  const softwareReplies = [
-    "Per aiutarti al meglio, dimmi quale software stai usando e che problema hai riscontrato.",
-    "Nessun problema, dimmi il nome del software e ti guido passo passo.",
-    "Se mi dici quale software devi installare o attivare, ti do subito le istruzioni corrette.",
-    "Ok, dimmi il nome del software e ti spiego come procedere senza errori."
-  ];
+  let detectedEmotion = null;
 
-  if (softwareKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = softwareReplies[Math.floor(Math.random() * softwareReplies.length)];
-    return res.json({ reply });
+  for (const emo of emotionalStates) {
+    if (emo.keywords.some(k => msg.includes(k))) {
+      detectedEmotion = emo.tone;
+      break;
+    }
   }
 
-  // --- RISPOSTE PREZZI ---
-  const priceKeywords = [
-    "prezzo", "quanto costa", "costo", "prezzi",
-    "quanto viene", "quanto lo fai", "quanto è", "quanto vale"
-  ];
-
-  const priceReplies = [
-    "I nostri prezzi variano in base al prodotto. Dimmi quale ti interessa e ti dico subito il costo.",
-    "Certo! Quale prodotto vuoi sapere quanto costa?",
-    "Dimmi il nome dell’articolo e ti dico immediatamente il prezzo.",
-    "Nessun problema, quale prodotto vuoi sapere quanto costa?"
-  ];
-
-  if (priceKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = priceReplies[Math.floor(Math.random() * priceReplies.length)];
-    return res.json({ reply });
+  // -------------------------------------------------------
+  // TONO EMOZIONALE EQUILIBRATO
+  // -------------------------------------------------------
+  function emotionalTone() {
+    switch (detectedEmotion) {
+      case "anger":
+        return "Capisco perfettamente la tua frustrazione e sono qui per aiutarti con calma e precisione. 💬";
+      case "sad":
+        return "Mi dispiace che tu stia vivendo questa situazione. Ti seguo passo dopo passo per risolverla. ✨";
+      case "fear":
+        return "Tranquillo, affrontiamo tutto insieme con chiarezza e sicurezza. 💬";
+      case "stress":
+        return "Respira un attimo, ci sono io. Ti guido con ordine e semplicità. ✨";
+      case "positive":
+        return "Grazie per il tuo messaggio, continuo ad assisterti con piacere. ✨";
+      default:
+        return null;
+    }
   }
 
-  // --- RISPOSTE TAGLIE ---
-  const sizeKeywords = [
-    "taglia", "taglie", "misura", "misure", "vestibilità", "calza"
-  ];
+  const emotionalIntro = emotionalTone();
 
-  const sizeReplies = [
-    "Certo! Dimmi il prodotto e ti dico subito le taglie disponibili.",
-    "Nessun problema, quale articolo vuoi sapere che taglie ha?",
-    "Dimmi il nome del prodotto e ti dico tutte le misure disponibili.",
-    "Ok! Quale taglia ti serve? Ti aiuto subito."
-  ];
+  // -------------------------------------------------------
+  // MINI-AI INTERNA (premium + elegante)
+  // -------------------------------------------------------
+  function premiumReply(text) {
+    const startEmojis = ["✨", "💬", "📦"];
+    const endEmojis = ["✨", "🔧", "❤️‍🔥"];
 
-  if (sizeKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = sizeReplies[Math.floor(Math.random() * sizeReplies.length)];
-    return res.json({ reply });
+    const start = Math.random() < 0.5 ? startEmojis[Math.floor(Math.random() * startEmojis.length)] + " " : "";
+    const end = Math.random() < 0.5 ? " " + endEmojis[Math.floor(Math.random() * endEmojis.length)] : "";
+
+    return `${start}${text}${end}`;
   }
 
-  // --- RISPOSTE SPEDIZIONE ---
-  const shippingKeywords = [
-    "spedizione", "consegna", "tempi", "arriva", "quando arriva", "corriere"
-  ];
+  // -------------------------------------------------------
+  // LOGICA SHOP
+  // -------------------------------------------------------
 
-  const shippingReplies = [
-    "Le spedizioni sono rapide! Dimmi il prodotto e ti dico i tempi esatti.",
-    "Certo! Vuoi sapere i tempi di consegna per un articolo specifico?",
-    "Le consegne sono veloci. Quale prodotto ti interessa?",
-    "Nessun problema, ti dico subito i tempi di spedizione."
-  ];
-
-  if (shippingKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = shippingReplies[Math.floor(Math.random() * shippingReplies.length)];
-    return res.json({ reply });
+  // SOFTWARE
+  const softwareKeywords = ["software", "installazione", "installare", "attivazione", "attivare", "licenza", "errore", "problema", "setup", "download"];
+  if (softwareKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("Per assisterti al meglio, indicami il nome del software e il tipo di difficoltà che stai riscontrando.")
+    });
   }
 
-  // --- RISPOSTE PAGAMENTI ---
-  const paymentKeywords = [
-    "pagamento", "pagare", "metodi", "paypal", "carta", "bonifico"
-  ];
-
-  const paymentReplies = [
-    "Accettiamo diversi metodi di pagamento. Vuoi sapere quali?",
-    "Certo! Ti interessa sapere se accettiamo PayPal, carte o altro?",
-    "Nessun problema, dimmi cosa vuoi acquistare e ti dico come pagare.",
-    "Ti aiuto subito! Che metodo di pagamento vuoi usare?"
-  ];
-
-  if (paymentKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = paymentReplies[Math.floor(Math.random() * paymentReplies.length)];
-    return res.json({ reply });
+  // PREZZI
+  const priceKeywords = ["prezzo", "quanto costa", "costo", "prezzi", "quanto viene", "quanto lo fai", "quanto è", "quanto vale"];
+  if (priceKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("I prezzi variano in base al prodotto. Dimmi quale articolo ti interessa e ti fornisco subito il costo esatto.")
+    });
   }
 
-  // --- RISPOSTE ASSISTENZA ---
-  const supportKeywords = [
-    "aiuto", "assistenza", "supporto", "problema", "non funziona"
-  ];
-
-  const supportReplies = [
-    "Sono qui per aiutarti! Dimmi cosa non funziona.",
-    "Nessun problema, spiegami cosa succede e ti aiuto subito.",
-    "Ok, raccontami il problema e lo risolviamo insieme.",
-    "Ci sono! Dimmi cosa non va e ti guido passo passo."
-  ];
-
-  if (supportKeywords.some(k => message.toLowerCase().includes(k))) {
-    const reply = supportReplies[Math.floor(Math.random() * supportReplies.length)];
-    return res.json({ reply });
+  // TAGLIE
+  const sizeKeywords = ["taglia", "taglie", "misura", "misure", "vestibilità", "calza"];
+  if (sizeKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("Certamente. Indicami il nome del prodotto e ti comunico immediatamente le taglie disponibili.")
+    });
   }
 
-  // --- RISPOSTA DI DEFAULT ---
-  const risposta = `
-Sono NEURA.
+  // SPEDIZIONE
+  const shippingKeywords = ["spedizione", "consegna", "tempi", "arriva", "quando arriva", "corriere"];
+  if (shippingKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("Le spedizioni sono rapide. Dimmi il prodotto che ti interessa e ti indico i tempi esatti di consegna.")
+    });
+  }
 
-Ho ricevuto il tuo messaggio: "${message}"
+  // PAGAMENTI
+  const paymentKeywords = ["pagamento", "pagare", "metodi", "paypal", "carta", "bonifico"];
+  if (paymentKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("Accettiamo diversi metodi di pagamento. Se vuoi, ti elenco tutte le opzioni disponibili.")
+    });
+  }
 
-Sto elaborando una risposta in stile umano, naturale e ragionata.
-Presto sarò potenziata con un modello AI avanzato.
-  `;
+  // ASSISTENZA
+  const supportKeywords = ["aiuto", "assistenza", "supporto", "non funziona", "problema"];
+  if (supportKeywords.some(k => msg.includes(k))) {
+    return res.json({
+      reply: premiumReply("Sono qui per aiutarti. Descrivimi cosa sta accadendo e ti guido con precisione.")
+    });
+  }
 
-  return res.status(200).json({ reply: risposta });
+  // -------------------------------------------------------
+  // RISPOSTA DI DEFAULT (premium + emozionale)
+  // -------------------------------------------------------
+  const defaultReply = premiumReply(
+    `Sono NEURA, il tuo assistente premium. Ho ricevuto il tuo messaggio e lo sto analizzando con attenzione per offrirti una risposta chiara e completa.`
+  );
+
+  return res.status(200).json({
+    reply: emotionalIntro ? emotionalIntro + " " + defaultReply : defaultReply
+  });
 }
