@@ -11,16 +11,8 @@ export default async function handler(req, res) {
 
   // --- RISPOSTE SOFTWARE ---
   const softwareKeywords = [
-    "software",
-    "installazione",
-    "installare",
-    "attivazione",
-    "attivare",
-    "licenza",
-    "errore",
-    "problema",
-    "setup",
-    "download"
+    "software", "installazione", "installare", "attivazione", "attivare",
+    "licenza", "errore", "problema", "setup", "download"
   ];
 
   const softwareReplies = [
@@ -37,14 +29,8 @@ export default async function handler(req, res) {
 
   // --- RISPOSTE PREZZI ---
   const priceKeywords = [
-    "prezzo",
-    "quanto costa",
-    "costo",
-    "prezzi",
-    "quanto viene",
-    "quanto lo fai",
-    "quanto è",
-    "quanto vale"
+    "prezzo", "quanto costa", "costo", "prezzi",
+    "quanto viene", "quanto lo fai", "quanto è", "quanto vale"
   ];
 
   const priceReplies = [
@@ -56,6 +42,74 @@ export default async function handler(req, res) {
 
   if (priceKeywords.some(k => message.toLowerCase().includes(k))) {
     const reply = priceReplies[Math.floor(Math.random() * priceReplies.length)];
+    return res.json({ reply });
+  }
+
+  // --- RISPOSTE TAGLIE ---
+  const sizeKeywords = [
+    "taglia", "taglie", "misura", "misure", "vestibilità", "calza"
+  ];
+
+  const sizeReplies = [
+    "Certo! Dimmi il prodotto e ti dico subito le taglie disponibili.",
+    "Nessun problema, quale articolo vuoi sapere che taglie ha?",
+    "Dimmi il nome del prodotto e ti dico tutte le misure disponibili.",
+    "Ok! Quale taglia ti serve? Ti aiuto subito."
+  ];
+
+  if (sizeKeywords.some(k => message.toLowerCase().includes(k))) {
+    const reply = sizeReplies[Math.floor(Math.random() * sizeReplies.length)];
+    return res.json({ reply });
+  }
+
+  // --- RISPOSTE SPEDIZIONE ---
+  const shippingKeywords = [
+    "spedizione", "consegna", "tempi", "arriva", "quando arriva", "corriere"
+  ];
+
+  const shippingReplies = [
+    "Le spedizioni sono rapide! Dimmi il prodotto e ti dico i tempi esatti.",
+    "Certo! Vuoi sapere i tempi di consegna per un articolo specifico?",
+    "Le consegne sono veloci. Quale prodotto ti interessa?",
+    "Nessun problema, ti dico subito i tempi di spedizione."
+  ];
+
+  if (shippingKeywords.some(k => message.toLowerCase().includes(k))) {
+    const reply = shippingReplies[Math.floor(Math.random() * shippingReplies.length)];
+    return res.json({ reply });
+  }
+
+  // --- RISPOSTE PAGAMENTI ---
+  const paymentKeywords = [
+    "pagamento", "pagare", "metodi", "paypal", "carta", "bonifico"
+  ];
+
+  const paymentReplies = [
+    "Accettiamo diversi metodi di pagamento. Vuoi sapere quali?",
+    "Certo! Ti interessa sapere se accettiamo PayPal, carte o altro?",
+    "Nessun problema, dimmi cosa vuoi acquistare e ti dico come pagare.",
+    "Ti aiuto subito! Che metodo di pagamento vuoi usare?"
+  ];
+
+  if (paymentKeywords.some(k => message.toLowerCase().includes(k))) {
+    const reply = paymentReplies[Math.floor(Math.random() * paymentReplies.length)];
+    return res.json({ reply });
+  }
+
+  // --- RISPOSTE ASSISTENZA ---
+  const supportKeywords = [
+    "aiuto", "assistenza", "supporto", "problema", "non funziona"
+  ];
+
+  const supportReplies = [
+    "Sono qui per aiutarti! Dimmi cosa non funziona.",
+    "Nessun problema, spiegami cosa succede e ti aiuto subito.",
+    "Ok, raccontami il problema e lo risolviamo insieme.",
+    "Ci sono! Dimmi cosa non va e ti guido passo passo."
+  ];
+
+  if (supportKeywords.some(k => message.toLowerCase().includes(k))) {
+    const reply = supportReplies[Math.floor(Math.random() * supportReplies.length)];
     return res.json({ reply });
   }
 
