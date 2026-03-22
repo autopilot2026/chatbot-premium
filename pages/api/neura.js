@@ -9,19 +9,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Messaggio mancante" });
   }
 
-  // Risposta in stile NEURA (umana, ragionata, naturale)
+  // Risposta temporanea (in attesa del modello AI vero)
   const risposta = `
-Sono NEURA, il tuo assistente.
+Sono NEURA.
 
-Ho letto quello che mi hai scritto: "${message}"
+Ho ricevuto il tuo messaggio: "${message}"
 
-E ti rispondo come un umano, non come un bot:
-- capisco il contesto
-- ragiono
-- ti accompagno passo passo
-- ti rispondo con chiarezza e naturalezza
-
-Dimmi pure cosa vuoi fare adesso.
+Sto elaborando una risposta in stile umano, naturale e ragionata.
+Presto sarò potenziata con un modello AI avanzato.
   `;
 
   res.status(200).json({ reply: risposta });
