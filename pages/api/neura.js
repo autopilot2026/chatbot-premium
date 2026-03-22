@@ -30,13 +30,36 @@ export default async function handler(req, res) {
     "Ok, dimmi il nome del software e ti spiego come procedere senza errori."
   ];
 
-  // Controllo parole chiave SOFTWARE
   if (softwareKeywords.some(k => message.toLowerCase().includes(k))) {
     const reply = softwareReplies[Math.floor(Math.random() * softwareReplies.length)];
     return res.json({ reply });
   }
 
-  // Risposta temporanea (in attesa del modello AI vero)
+  // --- RISPOSTE PREZZI ---
+  const priceKeywords = [
+    "prezzo",
+    "quanto costa",
+    "costo",
+    "prezzi",
+    "quanto viene",
+    "quanto lo fai",
+    "quanto è",
+    "quanto vale"
+  ];
+
+  const priceReplies = [
+    "I nostri prezzi variano in base al prodotto. Dimmi quale ti interessa e ti dico subito il costo.",
+    "Certo! Quale prodotto vuoi sapere quanto costa?",
+    "Dimmi il nome dell’articolo e ti dico immediatamente il prezzo.",
+    "Nessun problema, quale prodotto vuoi sapere quanto costa?"
+  ];
+
+  if (priceKeywords.some(k => message.toLowerCase().includes(k))) {
+    const reply = priceReplies[Math.floor(Math.random() * priceReplies.length)];
+    return res.json({ reply });
+  }
+
+  // --- RISPOSTA DI DEFAULT ---
   const risposta = `
 Sono NEURA.
 
