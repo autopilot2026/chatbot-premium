@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NEURA Chatbot Premium</title>
-  <link rel="stylesheet" href="/style.css">
+    <title>NEURA Chatbot Premium</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <h1>NEURA Chatbot Premium</h1>
 
-  <script src="/chat.js"></script>
-  <script src="/neura.js"></script>
-  <script src="/automation.js"></script>
+    <h1>NEURA Chatbot Premium</h1>
+
+    <!-- CHATBOT UI -->
+    <div id="neura-chatbox" class="chatbox">
+        <div class="chat-header">NEURA</div>
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Scrivi un messaggio...">
+            <button id="chat-send">Invia</button>
+        </div>
+    </div>
+    <!-- FINE CHATBOT UI -->
+
+    <script src="/chat.js"></script>
+    <script src="/neura.js"></script>
+    <script src="/automation.js"></script>
 </body>
 </html>
