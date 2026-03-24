@@ -1,62 +1,44 @@
-// Selezione elementi
-const messages = document.getElementById("messages");
-const input = document.getElementById("input");
-const send = document.getElementById("send");
+// --- CHAT.JS ---
+// Gestione UI + invio messaggi a NEURA
 
-// Funzione per aggiungere messaggi nella chat
-function addMessage(text, sender) {
-    const div = document.createElement("div");
-    div.textContent = sender + ": " + text;
-    div.style.marginBottom = "8px";
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+const input = document.getElementById("chat-input");
+const sendBtn = document.getElementById("chat-send");
+const messagesBox = document.getElementById("chat-messages");
+
+// Aggiunge un messaggio nella chat
+function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.className = sender === "user" ? "msg-user" : "msg-neura";
+    msg.textContent = text;
+    messagesBox.appendChild(msg);
+    messagesBox.scrollTop = messagesBox.scrollHeight;
 }
 
-// --- INVIO AL BACKEND NEURA ---
-async function sendToNeura(text) {
+// Invia messaggio a NEURA
+async function sendToNeura(message) {
     try {
-        const response = await fetch("/api/neura", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                input: text,
-                tono: "professionale"
-            })
-        });
-
-        const data = await response.json();
-        return data.risposta || "Errore nella risposta di NEURA.";
-
+        // NEURA deve essere definita in neura.js
+        const response = await window.neura.process(message);
+        addMessage("neura", response);
     } catch (err) {
-        return "Errore di connessione con NEURA.";
+        addMessage("neura", "Errore: impossibile elaborare la risposta.");
+        console.error("Errore NEURA:", err);
     }
 }
 
-// Invia messaggio
-async function sendMessage() {
+// Evento click
+sendBtn.addEventListener("click", () => {
     const text = input.value.trim();
-    if (!text) return;
+    if (text === "") return;
 
-    addMessage(text, "Tu");
+    addMessage("user", text);
+    sendToNeura(text);
     input.value = "";
-
-    // Mostra caricamento
-    addMessage("Sto elaborando...", "NEURA");
-
-    // Ottieni risposta da NEURA
-    const reply = await sendToNeura(text);
-
-    // Rimuove il messaggio "Sto elaborando..."
-    messages.lastChild.remove();
-
-    addMessage(reply, "NEURA");
-}
-
-// Eventi
-send.addEventListener("click", sendMessage);
-input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") sendMessage();
 });
 
+// Evento ENTER
+input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        sendBtn.click();
+    }
+});
