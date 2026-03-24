@@ -1,38 +1,31 @@
-import fetch from "node-fetch";
+// --- NEURA.JS ---
+// Motore logico del chatbot NEURA
 
-export default async function handler(req, res) {
-  try {
-    const { input, tono } = req.body;
+window.neura = {
+    // Funzione principale che elabora il messaggio
+    async process(message) {
 
-    const prompt = `
-Sei NEURA, il chatbot intelligente di AutoPilot 2026.
-Rispondi al messaggio del cliente con tono: ${tono}.
-Messaggio del cliente: "${input}"
-Genera una risposta chiara, utile e professionale.
-    `;
+        // Normalizziamo il testo
+        const text = message.toLowerCase().trim();
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "llama3-8b-8192",
-        messages: [
-          { role: "system", content: "Sei NEURA, un assistente AI professionale." },
-          { role: "user", content: prompt }
-        ]
-      })
-    });
+        // Risposte base (puoi ampliarle)
+        if (text.includes("ciao")) {
+            return "Ciao! Sono NEURA, come posso aiutarti?";
+        }
 
-    const data = await response.json();
-    const risposta = data.choices?.[0]?.message?.content || "Errore nella generazione della risposta.";
+        if (text.includes("come stai")) {
+            return "Sto benissimo e pronto a lavorare con te!";
+        }
 
-    res.status(200).json({ risposta });
+        if (text.includes("chi sei")) {
+            return "Sono NEURA, il chatbot intelligente creato da Giuseppe.";
+        }
 
-  } catch (error) {
-    console.error("Errore NEURA:", error);
-    res.status(500).json({ risposta: "Errore interno del server." });
-  }
-}
+        if (text.includes("aiuto")) {
+            return "Dimmi cosa ti serve e ti aiuto subito.";
+        }
+
+        // Risposta generica
+        return "Sto elaborando la tua richiesta… presto sarò più intelligente!";
+    }
+};
