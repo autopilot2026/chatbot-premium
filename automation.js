@@ -1,37 +1,44 @@
-// ===============================
-// AI AutoPilot 2026 – AUTOMATION ENGINE
-// ===============================
+// --- AUTOMATION.JS ---
+// Automazioni e funzioni avanzate per NEURA
 
-// 1. CONFIGURAZIONE FACEBOOK
-const FACEBOOK_ACCESS_TOKEN = "INSERISCI_IL_TUO_TOKEN";
-const FACEBOOK_PAGE_ID = "61585024054283";
+window.neura.automation = {
 
-// 2. FUNZIONE: Pubblicazione automatica su Facebook
-async function runAutomation(automationId) {
-    if (automationId === 1) {
-        publishToFacebook();
+    // Risposte automatiche a parole chiave
+    keywordTriggers(message) {
+        const text = message.toLowerCase();
+
+        if (text.includes("ricarica")) {
+            return "Modulo ricariche in preparazione… Giuseppe lo sta costruendo!";
+        }
+
+        if (text.includes("ai autopilot 2026")) {
+            return "AutoPilot 2026 è attivo. Dimmi cosa vuoi automatizzare.";
+        }
+
+        if (text.includes("neon engine")) {
+            return "NEON ENGINE è pronto. Vuoi collegare WhatsApp o Facebook?";
+        }
+
+        return null;
+    },
+
+    // Automazione principale
+    run(message) {
+        const trigger = this.keywordTriggers(message);
+        if (trigger) return trigger;
+
+        return null;
     }
-}
+};
 
-// 3. PUBBLICA SU FACEBOOK
-async function publishToFacebook() {
-    const message = "Pubblicazione automatica da AI AutoPilot 2026 🚀";
+// Intercetta i messaggi prima della risposta normale
+const originalProcess = window.neura.process;
 
-    const url = `https://graph.facebook.com/${FACEBOOK_PAGE_ID}/feed`;
+window.neura.process = async function(message) {
+    // 1. Controllo automazioni
+    const auto = window.neura.automation.run(message);
+    if (auto) return auto;
 
-    const params = {
-        method: "POST",
-        body: new URLSearchParams({
-            message: message,
-            access_token: FACEBOOK_ACCESS_TOKEN
-        })
-    };
-
-    try {
-        const response = await fetch(url, params);
-        const data = await response.json();
-        alert("Pubblicazione completata! ID Post: " + data.id);
-    } catch (error) {
-        alert("Errore nella pubblicazione: " + error);
-    }
-}
+    // 2. Risposta normale
+    return await originalProcess(message);
+};
